@@ -11,6 +11,7 @@ app.use(express.json());
 
 app.post('/download', async (req, res) => {
     const { url } = req.body;
+    console.log('Received URL:', url); // Log the received URL
     if (!url) {
         return res.status(400).json({ error: 'URL is required' });
     }
@@ -23,8 +24,10 @@ app.post('/download', async (req, res) => {
             }
         });
         const data = response.data;
+        console.log('API Response:', data); // Log the API response
         res.json(data);
     } catch (error) {
+        console.error('Error fetching data from API:', error); // Log any error
         res.status(500).json({ error: 'Failed to fetch data from API' });
     }
 });
