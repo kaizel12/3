@@ -2,56 +2,114 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <title>Instagram Downloader</title>
+    <title>IG Foto dan IG Downloader</title>
     <style>
-        .container {
-            width: 100%;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
         }
-        h1 {
-            color: #007bff;
-            text-align: center;
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .result img {
+            max-width: 200px;
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white h-screen flex flex-col justify-center items-center">
-    <div class="w-full max-w-lg">
-        <div class="container">
-            <h1 class="text-2xl font-bold mb-4">Instagram Downloader</h1>
-            <input type="text" id="videoUrl" placeholder="Enter Instagram video URL..." class="w-full bg-gray-800 rounded-lg py-2 px-4 mb-4 text-white">
-            <div class="flex justify-center">
-                <button onclick="downloadVideo()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg mb-4">Download</button>
-            </div>
-        </div>
-    </div>
+<body>
+    <h1>IG Foto dan IG Downloader</h1>
+    <input type="text" id="igUrl" placeholder="Masukkan URL Instagram">
+    <button onclick="fetchData()">Fetch Data</button>
+
+    <h2>IG Foto Result:</h2>
+    <div id="igfotoResult" class="result"></div>
+
+    <h2>IG Downloader Result:</h2>
+    <div id="igdownloaderResult" class="result"></div>
+
+    <div id="error" class="error"></div>
+
     <script>
-        async function downloadVideo() {
-            let videoUrl = document.getElementById("videoUrl").value;
+        async function fetchData() {
+            const url = document.getElementById('igUrl').value;
+            const igfotoResult = document.getElementById('igfotoResult');
+            const igdownloaderResult = document.getElementById('igdownloaderResult');
+            const errorDiv = document.getElementById('error');
+
+            igfotoResult.innerHTML = '';
+            igdownloaderResult.innerHTML = '';
+            errorDiv.innerHTML = '';
+
             try {
-                const response = await fetch(`https://skizo.tech/api/ig?apikey=avatar&url=${videoUrl}`);
-                const data = await response.json();
-                if (data && data[0] && data[0].url) {
-                    const resultUrl = data[0].url;
+                const igfotoData = await igfoto(url);
+                igfotoData.forEach(item => {
+                    const img = document.createElement('img');
+                    img.src = item.thumbnail;
+                    igfotoResult.appendChild(img);
+                });
+            } catch (error) {
+                errorDiv.innerHTML = `Error IG Foto: ${error.message}`;
+            }
+
+            try {
+                const igdownloaderData = await igdownloader(url);
+                igdownloaderData.forEach(item => {
                     const a = document.createElement('a');
-                    a.href = resultUrl;
-                    a.download = ''; // Allow browser to determine file name
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
+                    a.href = item.url;
+                    a.innerHTML = item.type;
+                    a.target = '_blank';
+                    igdownloaderResult.appendChild(a);
+                    igdownloaderResult.appendChild(document.createElement('br'));
+                });
+            } catch (error) {
+                errorDiv.innerHTML = `Error IG Downloader: ${error.message}`;
+            }
+        }
+
+        async function igfoto(url) {
+            try {
+                const response = await axios.get(url);
+                const data = response.data;
+
+                if (data && data.results) {
+                    return data.results.map(item => ({
+                        thumbnail: item.thumbnail,
+                        url: item.url
+                    }));
                 } else {
-                    alert('Failed to fetch video URL. Please check the video URL and try again.');
+                    throw new Error('Data tidak ditemukan.');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to download video. Please try again.');
+                console.error('Error saat mengambil data:', error.message);
+                throw error;
+            }
+        }
+
+        async function igdownloader(url) {
+            try {
+                const response = await axios.get(url);
+                const data = response.data;
+
+                if (data && data.media) {
+                    return data.media.map(item => ({
+                        type: item.type,
+                        url: item.url
+                    }));
+                } else {
+                    throw new Error('Data tidak ditemukan.');
+                }
+            } catch (error) {
+                console.error('Error saat mengambil data:', error.message);
+                throw error;
             }
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 </html>
