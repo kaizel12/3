@@ -50,23 +50,14 @@
             const data = await response.json();
             const resultDiv = document.getElementById('result');
             if (response.ok) {
-                resultDiv.innerHTML = `
-                    <h2>${data.title}</h2>
-                    <img src="${data.thumbnail}" alt="Thumbnail" style="width: 100%; max-width: 300px;">
-                    <p>Duration: ${data.duration}</p>
-                    <h3>Download Links</h3>
-                    <ul>
-                        ${Object.keys(data.video).map(quality => `
-                            <li><a href="${data.video[quality].url}" target="_blank">${quality} (${data.video[quality].fileSizeH})</a></li>
-                        `).join('')}
-                    </ul>
-                    <h3>Audio Links</h3>
-                    <ul>
-                        ${Object.keys(data.audio).map(quality => `
-                            <li><a href="${data.audio[quality].url}" target="_blank">${quality} (${data.audio[quality].fileSizeH})</a></li>
-                        `).join('')}
-                    </ul>
-                `;
+                const videoUrl = data.video['720p'].url; // Choose the desired quality here
+                const a = document.createElement('a');
+                a.href = videoUrl;
+                a.download = data.title + '.mp4';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                resultDiv.innerHTML = `<p>Video is being downloaded...</p>`;
             } else {
                 resultDiv.innerHTML = `<p>${data.error}</p>`;
             }
