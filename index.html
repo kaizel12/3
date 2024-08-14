@@ -13,7 +13,7 @@
             padding: 10px;
             margin: 10px 0;
         }
-        .result img {
+        .result img, .result video {
             max-width: 200px;
             margin: 10px 0;
         }
@@ -25,25 +25,25 @@
 <body>
     <h1>IG Foto dan IG Downloader</h1>
     <input type="text" id="igUrl" placeholder="Masukkan URL Instagram">
-    <button onclick="fetchData()">Fetch Data</button>
+    <button onclick="fetchFoto()">Fetch Foto</button>
+    <button onclick="fetchVideo()">Fetch Video</button>
 
     <h2>IG Foto Result:</h2>
     <div id="igfotoResult" class="result"></div>
 
-    <h2>IG Downloader Result:</h2>
-    <div id="igdownloaderResult" class="result"></div>
+    <h2>IG Video Result:</h2>
+    <div id="igvideoResult" class="result"></div>
 
     <div id="error" class="error"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        async function fetchData() {
+        async function fetchFoto() {
             const url = document.getElementById('igUrl').value;
             const igfotoResult = document.getElementById('igfotoResult');
-            const igdownloaderResult = document.getElementById('igdownloaderResult');
             const errorDiv = document.getElementById('error');
 
             igfotoResult.innerHTML = '';
-            igdownloaderResult.innerHTML = '';
             errorDiv.innerHTML = '';
 
             try {
@@ -56,29 +56,36 @@
             } catch (error) {
                 errorDiv.innerHTML = `Error IG Foto: ${error.message}`;
             }
+        }
+
+        async function fetchVideo() {
+            const url = document.getElementById('igUrl').value;
+            const igvideoResult = document.getElementById('igvideoResult');
+            const errorDiv = document.getElementById('error');
+
+            igvideoResult.innerHTML = '';
+            errorDiv.innerHTML = '';
 
             try {
                 const igdownloaderData = await igdownloader(url);
                 igdownloaderData.forEach(item => {
-                    const a = document.createElement('a');
-                    a.href = item.url;
-                    a.innerHTML = item.type;
-                    a.target = '_blank';
-                    igdownloaderResult.appendChild(a);
-                    igdownloaderResult.appendChild(document.createElement('br'));
+                    const video = document.createElement('video');
+                    video.src = item.url;
+                    video.controls = true;
+                    igvideoResult.appendChild(video);
                 });
             } catch (error) {
-                errorDiv.innerHTML = `Error IG Downloader: ${error.message}`;
+                errorDiv.innerHTML = `Error IG Video: ${error.message}`;
             }
         }
 
         async function igfoto(url) {
             try {
-                const response = await axios.get(url);
+                const response = await axios.get(`https://api.betabotz.eu.org/api/search/xnxx?query=japanese&apikey=kazamibot&url=${url}`);
                 const data = response.data;
 
                 if (data && data.results) {
-                    return data.results.map(item => ({
+                    return data.results.filter(item => item.type === 'image').map(item => ({
                         thumbnail: item.thumbnail,
                         url: item.url
                     }));
@@ -93,11 +100,11 @@
 
         async function igdownloader(url) {
             try {
-                const response = await axios.get(url);
+                const response = await axios.get(`https://api.betabotz.eu.org/api/search/xnxx?query=japanese&apikey=kazamibot&url=${url}`);
                 const data = response.data;
 
                 if (data && data.media) {
-                    return data.media.map(item => ({
+                    return data.media.filter(item => item.type === 'video').map(item => ({
                         type: item.type,
                         url: item.url
                     }));
@@ -110,6 +117,5 @@
             }
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 </html>
