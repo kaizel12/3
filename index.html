@@ -3,15 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jesha's Book Store</title>
+    <title>Custom Loader</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-            color: #333;
-        }
         .loader-container {
             position: fixed;
             top: 0;
@@ -21,83 +14,53 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #fff;
+            background-color: #ffffff; /* Ubah warna latar belakang di sini */
             z-index: 9999;
         }
-        .loader-container img {
+        .loader {
+            width: 120px;
+            height: 120px;
+            background-color: #add8e6; /* Warna latar belakang elemen pembungkus GIF */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%; /* Membuat bentuk lingkaran */
+        }
+        .loader img {
             width: 100px;
             height: 100px;
         }
-        .loader-container p {
+        .loader p {
             margin-top: 10px;
             font-size: 1.2em;
-            color: #555;
+            color: #333;
             text-align: center;
-        }
-        .main-content {
-            display: none; /* Initially hide the main content */
-        }
-        .header {
-            background-color: #4CAF50;
-            padding: 10px;
-            text-align: center;
-            color: white;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 2em;
-        }
-        .content {
-            padding: 20px;
-            text-align: center;
-        }
-        .content h2 {
-            margin-bottom: 20px;
-        }
-        .content p {
-            margin-bottom: 10px;
-            font-size: 1em;
-            line-height: 1.6;
         }
     </style>
 </head>
 <body>
-
     <!-- Loader -->
     <div class="loader-container">
-        <div>
+        <div class="loader">
             <img src="./loader-img.gif" alt="Loader GIF">
-            <p>Untuk Jesha</p>
         </div>
+        <p>Untuk Jesha</p>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Header -->
-        <div class="header">
-            <h1>Jesha's Book Store</h1>
-        </div>
-
-        <!-- Content -->
-        <div class="content">
-            <h2>Welcome to the Book Store</h2>
-            <p>Explore a wide variety of books across different genres.</p>
-            <p>New arrivals every week. Check out our latest collection!</p>
-        </div>
+        <!-- Konten Utama Anda -->
     </div>
 
     <script>
-        // JavaScript to hide loader and show content after GIF completes
+        // JavaScript untuk menyembunyikan loader setelah durasi tertentu
         window.addEventListener("load", function() {
-            // Misalnya durasi GIF adalah 3 detik
-            const gifDuration = 3000; // 3 detik dalam milidetik
-
+            const gifDuration = 3000; // Durasi GIF
             setTimeout(function() {
                 document.querySelector(".loader-container").style.display = "none";
                 document.querySelector(".main-content").style.display = "block";
             }, gifDuration);
         });
     </script>
-
 </body>
 </html>
