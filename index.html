@@ -87,10 +87,15 @@
     </div>
 
     <script>
-        // JavaScript to hide loader and show content
+        // JavaScript to hide loader and show content after GIF completes
         window.addEventListener("load", function() {
-            document.querySelector(".loader-container").style.display = "none";
-            document.querySelector(".main-content").style.display = "block";
+            // Misalnya durasi GIF adalah 3 detik
+            const gifDuration = 3000; // 3 detik dalam milidetik
+
+            setTimeout(function() {
+                document.querySelector(".loader-container").style.display = "none";
+                document.querySelector(".main-content").style.display = "block";
+            }, gifDuration);
         });
     </script>
 
