@@ -3,119 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IG Foto dan IG Downloader</title>
+    <title>Jesha's Book Store</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
         }
-        input, button {
+        .loader-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #fff;
+        }
+        .loader-container img {
+            width: 100px;
+            height: 100px;
+        }
+        .loader-container p {
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: #555;
+        }
+        .header {
+            background-color: #4CAF50;
             padding: 10px;
-            margin: 10px 0;
+            text-align: center;
+            color: white;
         }
-        .result img, .result video {
-            max-width: 200px;
-            margin: 10px 0;
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
         }
-        .error {
-            color: red;
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .content h2 {
+            margin-bottom: 20px;
+        }
+        .content p {
+            margin-bottom: 10px;
+            font-size: 1em;
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
-    <h1>IG Foto dan IG Downloader</h1>
-    <input type="text" id="igUrl" placeholder="Masukkan URL Instagram">
-    <button onclick="fetchFoto()">Fetch Foto</button>
-    <button onclick="fetchVideo()">Fetch Video</button>
 
-    <h2>IG Foto Result:</h2>
-    <div id="igfotoResult" class="result"></div>
+    <!-- Loader -->
+    <div class="loader-container">
+        <div>
+            <img src="./loader-img.gif" alt="Loader GIF">
+            <p>Untuk Jesha</p>
+        </div>
+    </div>
 
-    <h2>IG Video Result:</h2>
-    <div id="igvideoResult" class="result"></div>
+    <!-- Header -->
+    <div class="header">
+        <h1>Jesha's Book Store</h1>
+    </div>
 
-    <div id="error" class="error"></div>
+    <!-- Main Content -->
+    <div class="content">
+        <h2>Welcome to the Book Store</h2>
+        <p>Explore a wide variety of books across different genres.</p>
+        <p>New arrivals every week. Check out our latest collection!</p>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        async function fetchFoto() {
-            const url = document.getElementById('igUrl').value;
-            const igfotoResult = document.getElementById('igfotoResult');
-            const errorDiv = document.getElementById('error');
-
-            igfotoResult.innerHTML = '';
-            errorDiv.innerHTML = '';
-
-            try {
-                const igfotoData = await igfoto(url);
-                igfotoData.forEach(item => {
-                    const img = document.createElement('img');
-                    img.src = item.thumbnail;
-                    igfotoResult.appendChild(img);
-                });
-            } catch (error) {
-                errorDiv.innerHTML = `Error IG Foto: ${error.message}`;
-            }
-        }
-
-        async function fetchVideo() {
-            const url = document.getElementById('igUrl').value;
-            const igvideoResult = document.getElementById('igvideoResult');
-            const errorDiv = document.getElementById('error');
-
-            igvideoResult.innerHTML = '';
-            errorDiv.innerHTML = '';
-
-            try {
-                const igdownloaderData = await igdownloader(url);
-                igdownloaderData.forEach(item => {
-                    const video = document.createElement('video');
-                    video.src = item.url;
-                    video.controls = true;
-                    igvideoResult.appendChild(video);
-                });
-            } catch (error) {
-                errorDiv.innerHTML = `Error IG Video: ${error.message}`;
-            }
-        }
-
-        async function igfoto(url) {
-            try {
-                const response = await axios.get(`https://api.betabotz.eu.org/api/search/xnxx?query=japanese&apikey=kazamibot&url=${url}`);
-                const data = response.data;
-
-                if (data && data.results) {
-                    return data.results.filter(item => item.type === 'image').map(item => ({
-                        thumbnail: item.thumbnail,
-                        url: item.url
-                    }));
-                } else {
-                    throw new Error('Data tidak ditemukan.');
-                }
-            } catch (error) {
-                console.error('Error saat mengambil data:', error.message);
-                throw error;
-            }
-        }
-
-        async function igdownloader(url) {
-            try {
-                const response = await axios.get(`https://api.betabotz.eu.org/api/search/xnxx?query=japanese&apikey=kazamibot&url=${url}`);
-                const data = response.data;
-
-                if (data && data.media) {
-                    return data.media.filter(item => item.type === 'video').map(item => ({
-                        type: item.type,
-                        url: item.url
-                    }));
-                } else {
-                    throw new Error('Data tidak ditemukan.');
-                }
-            } catch (error) {
-                console.error('Error saat mengambil data:', error.message);
-                throw error;
-            }
-        }
-    </script>
 </body>
 </html>
