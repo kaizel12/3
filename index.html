@@ -13,11 +13,16 @@
             color: #333;
         }
         .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             background-color: #fff;
+            z-index: 9999;
         }
         .loader-container img {
             width: 100px;
@@ -27,6 +32,10 @@
             margin-top: 10px;
             font-size: 1.2em;
             color: #555;
+            text-align: center;
+        }
+        .main-content {
+            display: none; /* Initially hide the main content */
         }
         .header {
             background-color: #4CAF50;
@@ -62,17 +71,28 @@
         </div>
     </div>
 
-    <!-- Header -->
-    <div class="header">
-        <h1>Jesha's Book Store</h1>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1>Jesha's Book Store</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <h2>Welcome to the Book Store</h2>
+            <p>Explore a wide variety of books across different genres.</p>
+            <p>New arrivals every week. Check out our latest collection!</p>
+        </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="content">
-        <h2>Welcome to the Book Store</h2>
-        <p>Explore a wide variety of books across different genres.</p>
-        <p>New arrivals every week. Check out our latest collection!</p>
-    </div>
+    <script>
+        // JavaScript to hide loader and show content
+        window.addEventListener("load", function() {
+            document.querySelector(".loader-container").style.display = "none";
+            document.querySelector(".main-content").style.display = "block";
+        });
+    </script>
 
 </body>
 </html>
